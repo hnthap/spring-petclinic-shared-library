@@ -1,6 +1,7 @@
 def call(String branchName, String registryUrl) {
   def port = branchName == 'main' ? '8083' : '8084'
   def envName = branchName == 'main' ? 'prod' : 'uat'
+  String cleanRegistry = registryUrl.replaceFirst("^https?://", "")
   
   withCredentials([usernamePassword(
     credentialsId: 'nexus-credentials',
@@ -8,10 +9,10 @@ def call(String branchName, String registryUrl) {
     passwordVariable: 'PASS'
   )]) {
     sh """
-    echo \$PASS | docker login ${registryUrl} -u \$USER --password-stdin
+    echo \$PASS | docker login ${cleanRegistry} -u \$USER --password-stdin
     docker rm -f petclinic-${envName} || true
-    docker pull ${registryUrl}/petclinic:latest
-    docker run -d -p ${port}:8080 --name petclinic-${envName} ${registryUrl}/petclinic:latest
+    docker pull ${cleanRegistry}/petclinic:latest
+    docker run -d -p ${port}:8080 --name petclinic-${envName} ${cleanRegistry}/petclinic:latest
     """
   }
 }
