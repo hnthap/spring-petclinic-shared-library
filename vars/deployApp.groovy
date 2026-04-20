@@ -12,7 +12,7 @@ def call(String branchName, String registryUrl) {
     echo \$PASS | docker login ${cleanRegistry} -u \$USER --password-stdin
     docker rm -f petclinic-${envName} || true
     docker pull ${cleanRegistry}/petclinic:latest
-    docker run -d -p ${port}:8080 --name petclinic-${envName} ${cleanRegistry}/petclinic:latest
+    docker run -d -p ${port}:8080 --name petclinic-${envName} --restart unless-stopped ${cleanRegistry}/petclinic:latest
     """
   }
 }
