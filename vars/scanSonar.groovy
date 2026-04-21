@@ -3,6 +3,6 @@ def call(String hostUrl) {
     credentialsId: 'sonar-token',
     variable: 'SONAR_TOKEN'
   )]) {
-    sh "./mvnw sonar:sonar -Dsonar.host.url=${hostUrl} -Dsonar.login=\$SONAR_TOKEN"
+    sh "./mvnw sonar:sonar -Dsonar.host.url=${hostUrl} -Dsonar.token=\$SONAR_TOKEN"
   }
 }
